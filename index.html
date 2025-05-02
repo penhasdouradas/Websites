@@ -163,39 +163,29 @@
     track.insertAdjacentHTML("beforeend", contentHTML);
   }
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        for (let i = 0; i < 2; i++) {
-          track.insertAdjacentHTML("beforeend", contentHTML);
-        }
-      }
-    });
-  }, {
-    root: null,
-    threshold: 1.0
-  });
-  const sentinel = document.createElement("div");
-  sentinel.style.height = "1px";
-  track.appendChild(sentinel);
-  observer.observe(sentinel);
-
-  const appendContent = () => {
-    for (let i = 0; i < 2; i++) {
-      track.insertAdjacentHTML("beforeend", contentHTML);
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      appendContent();
     }
-    track.appendChild(sentinel); // Move sentinel to the end again
-  };
+  });
+}, {
+  root: null,
+  threshold: 1.0
+});
 
-  observer.disconnect();
-  observer.observe(sentinel);
+const sentinel = document.createElement("div");
+sentinel.style.height = "1px";
+track.appendChild(sentinel);
+observer.observe(sentinel);
 
-  observer.callback = (entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        appendContent();
-      }
-    });
-  };
+const appendContent = () => {
+  for (let i = 0; i < 2; i++) {
+    track.insertAdjacentHTML("beforeend", contentHTML);
+  }
+  track.appendChild(sentinel); // Move sentinel to the end
+};
+
+  
 }
   </script>
 </body>
