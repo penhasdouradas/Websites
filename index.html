@@ -178,6 +178,24 @@
   sentinel.style.height = "1px";
   track.appendChild(sentinel);
   observer.observe(sentinel);
+
+  const appendContent = () => {
+    for (let i = 0; i < 2; i++) {
+      track.insertAdjacentHTML("beforeend", contentHTML);
+    }
+    track.appendChild(sentinel); // Move sentinel to the end again
+  };
+
+  observer.disconnect();
+  observer.observe(sentinel);
+
+  observer.callback = (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        appendContent();
+      }
+    });
+  };
 }
   </script>
 </body>
