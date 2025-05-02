@@ -110,38 +110,45 @@
   </div>
 </div>
   <script>
-    const contentHTML = `
-      <div class="content">
-        <h1>PENHAS DOURADAS</h1>
-        <div class="links">
-          <a href="https://www.soundcloud.com/penhasdouradas" target="_blank">Soundcloud</a> — 
-          <a href="https://penhasdouradas.bandcamp.com" target="_blank">Bandcamp</a> — 
-          <a href="https://instagram.com/penhas.douradas" target="_blank">Instagram</a> —
-          <a href="https://youtube.com/@penhasdouradas" target="_blank">Youtube</a> —
-          <a href="mailto:contact.penhasdouradas@proton.me">Email</a>
-        </div>
-        <div class="section">
-          <p>Penhas Douradas is the music project of Portuguese-born João Chaves. Inspired by the serene landscapes and quiet introspection of the mountains, and named after a region close to where the artist grew up, the name carries a deeply personal connection, a place that often stood in for home on weather forecasts, becoming a subtle but meaningful symbol of belonging.</p>
-        </div>
-        <div class="section">
-          <p>Rooted in memories of misty hills, changing seasons, and the ever-present stillness of nature, Penhas Douradas explores sound as a gentle invitation to slow down. Through slow-moving textures, delicate sonic explorations, and meditative soundscapes, it opens spaces for reflection, inner listening, and grounding, a way to reconnect with both the earth and oneself.</p>
-        </div>
-        <div class="section">
-          <h2>ANNOUNCEMENTS</h2>
-          <p>Sabedoria Interior is set to be released on 16th of May in all major streaming platforms</p>
-        </div>
-        <div class="section">
-          <h2>MEDIA</h2>
-          <p><a href="https://tr.ee/7MLDnzjgn6" target="_blank">Stream Música de Ambiente</a></p>
-          <p><a href="https://youtu.be/4ln-Vfysqks" target="_blank">Watch Clareza</a></p>
-        </div>
+  const contentHTML = `
+    <div class="content">
+      <h1>PENHAS DOURADAS</h1>
+      <div class="links">
+        <a href="https://www.soundcloud.com/penhasdouradas" target="_blank">Soundcloud</a> — 
+        <a href="https://penhasdouradas.bandcamp.com" target="_blank">Bandcamp</a> — 
+        <a href="https://instagram.com/penhas.douradas" target="_blank">Instagram</a> —
+        <a href="https://youtube.com/@penhasdouradas" target="_blank">Youtube</a> —
+        <a href="mailto:contact.penhasdouradas@proton.me">Email</a>
       </div>
-    `;
+      <div class="section">
+        <p>Penhas Douradas is the music project of Portuguese-born João Chaves. Inspired by the serene landscapes and quiet introspection of the mountains, and named after a region close to where the artist grew up, the name carries a deeply personal connection, a place that often stood in for home on weather forecasts, becoming a subtle but meaningful symbol of belonging.</p>
+      </div>
+      <div class="section">
+        <p>Rooted in memories of misty hills, changing seasons, and the ever-present stillness of nature, Penhas Douradas explores sound as a gentle invitation to slow down. Through slow-moving textures, delicate sonic explorations, and meditative soundscapes, it opens spaces for reflection, inner listening, and grounding, a way to reconnect with both the earth and oneself.</p>
+      </div>
+      <div class="section">
+        <h2>ANNOUNCEMENTS</h2>
+        <p>Sabedoria Interior is set to be released on 16th of May in all major streaming platforms</p>
+      </div>
+      <div class="section">
+        <h2>MEDIA</h2>
+        <p><a href="https://tr.ee/7MLDnzjgn6" target="_blank">Stream Música de Ambiente</a></p>
+        <p><a href="#" class="watch-toggle">▶ Watch Clareza</a></p>
+<div class="video-container" hidden>
+  <iframe style="aspect-ratio: 16/9; width: 100%; max-width: 720px; height: auto;" src="https://www.youtube.com/embed/4ln-Vfysqks" frameborder="0" allowfullscreen></iframe>
+</div>
+      </div>
+    </div>
+  `;
 
-    if (window.innerWidth > 768) {
+  function setupLayout() {
+    const isDesktop = window.innerWidth > 768;
+
+    if (isDesktop) {
       const columns = ["track1", "track2", "track3"];
       columns.forEach(id => {
         const track = document.getElementById(id);
+        track.innerHTML = "";
         for (let i = 0; i < 3; i++) {
           track.insertAdjacentHTML("beforeend", contentHTML);
         }
@@ -157,36 +164,54 @@
         });
       });
     } else {
-  const track = document.getElementById("track1");
-  let repeatCount = 3;
-  for (let i = 0; i < repeatCount; i++) {
-    track.insertAdjacentHTML("beforeend", contentHTML);
-  }
-  const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      appendContent();
+      const track = document.getElementById("track1");
+      track.innerHTML = "";
+      let repeatCount = 3;
+      for (let i = 0; i < repeatCount; i++) {
+        track.insertAdjacentHTML("beforeend", contentHTML);
+      }
+
+      const sentinel = document.createElement("div");
+      sentinel.style.height = "1px";
+      track.appendChild(sentinel);
+
+      const appendContent = () => {
+        for (let i = 0; i < 2; i++) {
+          track.insertAdjacentHTML("beforeend", contentHTML);
+        }
+        track.appendChild(sentinel);
+      };
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            appendContent();
+          }
+        });
+      }, {
+        root: null,
+        threshold: 1.0
+      });
+
+      observer.observe(sentinel);
     }
-  });
-}, {
-  root: null,
-  threshold: 1.0
-});
-
-const sentinel = document.createElement("div");
-sentinel.style.height = "1px";
-track.appendChild(sentinel);
-observer.observe(sentinel);
-
-const appendContent = () => {
-  for (let i = 0; i < 2; i++) {
-    track.insertAdjacentHTML("beforeend", contentHTML);
   }
-  track.appendChild(sentinel); // Move sentinel to the end
-};
 
-  
-}
-  </script>
+  setupLayout();
+
+  window.addEventListener("resize", () => {
+    location.reload();
+  });
+  document.addEventListener("click", e => {
+  if (e.target.classList.contains("watch-toggle")) {
+    const drawer = document.getElementById("global-video");
+    drawer.style.display = drawer.style.display === 'none' ? 'flex' : 'none';
+    e.preventDefault();
+  }
+});
+</script>
+  <div id="global-video" style="position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; background: #fff; border-top: 1px solid #ccc; padding: 1em; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000; display: none;">
+    <iframe width="100%" height="315" src="https://www.youtube.com/embed/4ln-Vfysqks" frameborder="0" allowfullscreen></iframe>
+  </div>
 </body>
 </html>
