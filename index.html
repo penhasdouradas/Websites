@@ -1,115 +1,125 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Penhas Douradas</title>
-    <style>
-      * {
-        box-sizing: border-box;
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penhas Douradas</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0 auto;
+      max-width: 50em;
+      line-height: 1.5;
+      padding: 1em;
+      font-family: "Helvetica", "Arial", sans-serif;
+      color: #555;
+      font-size: 0.9em;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 2em 1em 1em;
+      text-align: center;
+      background: rgba(255, 255, 255, 0);
+    }
+
+    h1 {
+      color: #333;
+      font-size: 2.1em;
+      margin: 0;
+    }
+
+    .links a {
+      text-decoration: none;
+      color: #333;
+      margin: 0 1em;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    a {
+      text-decoration: none;
+      color: #2538dd;
+      cursor: pointer;
+    }
+
+    p {
+      margin-top: 2em;
+    }
+
+    hr {
+      margin: 2em 0;
+    }
+
+    #streamDrawer {
+      display: none;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PENHAS DOURADAS</h1>
+    <div class="links">
+      <a href="https://soundcloud.com/penhasdouradas" target="_blank">Soundcloud</a> &mdash;
+      <a href="https://penhasdouradas.bandcamp.com" target="_blank">Bandcamp</a> &mdash;
+      <a href="https://instagram.com/penhas.douradas" target="_blank">Instagram</a> &mdash;
+      <a href="https://youtube.com/@penhasdouradas" target="_blank">Youtube</a>
+    </div>
+  </header>
+
+  <p>
+    Penhas Douradas is the music project of Portuguese-born João Chaves.
+    Inspired by the serene landscapes and quiet introspection of the mountains,
+    and named after a region close to where the artist grew up, the name carries
+    a deeply personal connection, a place that often stood in for home on weather
+    forecasts, becoming a subtle but meaningful symbol of belonging.
+    <br><br>
+    Rooted in memories of misty hills, changing seasons, and the ever-present
+    stillness of nature, Penhas Douradas explores sound as a gentle invitation to
+    slow down. Through slow-moving textures, delicate sonic explorations, and
+    meditative soundscapes, it opens spaces for reflection, inner listening,
+    and grounding — a way to reconnect with both the earth and oneself.
+  </p>
+
+  <hr>
+  <p>"Sabedoria Interior" is set to be released on 16th of May in all major streaming platforms</p>
+
+  <hr>
+  <p>
+    Stream <a id="toggleStream">"Música de Ambiente"</a>
+  </p>
+
+  <div id="streamDrawer">
+    <iframe style="border-radius:12px"
+      src="https://open.spotify.com/embed/album/02CxmPazOdRRYrIoqe291A?utm_source=generator"
+      width="100%" height="352" frameborder="0" allowfullscreen=""
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <hr>
+  <p>
+    Watch <a href="https://youtu.be/4ln-Vfysqks" target="_blank">"Clareza"</a>
+  </p>
+
+  <script>
+    document.getElementById("toggleStream").addEventListener("click", function () {
+      const drawer = document.getElementById("streamDrawer");
+      if (drawer.style.display === "none" || drawer.style.display === "") {
+        drawer.style.display = "block";
+      } else {
+        drawer.style.display = "none";
       }
-
-      body {
-        margin: 0 auto;
-        max-width: 50em;
-        line-height: 1.5;
-        padding: 1em;
-        font-family: "Helvetica", "Arial", sans-serif;
-        color: #555;
-        font-size: 0.9em;
-      }
-
-      header {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        padding: 2em 1em 1em;
-        text-align: center;
-        background: rgba(255, 255, 255, 0); /* transparent background */
-      }
-
-      h1 {
-        color: #333;
-        font-size: 2.1em;
-        margin: 0;
-      }
-
-      /* For links inside the header */
-      .links a {
-        text-decoration: none; /* Remove underline */
-        color: #333333;
-        margin: 0 1em;
-      }
-
-      .links a:hover {
-        text-decoration: underline; /* Underline on hover inside header */
-      }
-
-      /* For all other links outside the header */
-      a {
-        text-decoration: none; /* Remove underline */
-        color: #2538dd;
-      }
-
-      a:hover {
-        text-decoration: none; /* No underline on hover for other links */
-      }
-
-      p {
-        margin-top: 2em;
-      }
-
-      hr {
-        margin: 2em 0;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>PENHAS DOURADAS</h1>
-      <div class="links">
-        <a href="https://soundcloud.com/penhasdouradas" target="_blank">Soundcloud</a> &mdash;
-        <a href="https://penhasdouradas.bandcamp.com" target="_blank">Bandcamp</a> &mdash;
-        <a href="https://instagram.com/penhas.douradas" target="_blank">Instagram</a> &mdash;
-        <a href="https://youtube.com/@penhasdouradas" target="_blank">Youtube</a>
-      </div>
-    </header>
-
-    <p>
-      Penhas Douradas is the music project of Portuguese-born João Chaves.
-      Inspired by the serene landscapes and quiet introspection of the mountains,
-      and named after a region close to where the artist grew up, the name carries
-      a deeply personal connection, a place that often stood in for home on weather
-      forecasts, becoming a subtle but meaningful symbol of belonging.
-    </p>
-    <p>
-      Rooted in memories of misty hills, changing seasons, and the ever-present
-      stillness of nature, Penhas Douradas explores sound as a gentle invitation to
-      slow down. Through slow-moving textures, delicate sonic explorations, and
-      meditative soundscapes, it opens spaces for reflection, inner listening,
-      and grounding — a way to reconnect with both the earth and oneself.
-    </p>
-
-    <hr>
-    <p>
-      "Sabedoria Interior" is set to be released on 16th of May in all major streaming platforms
-    </p>
-    
-    <hr>
-    <p>
-        Stream
-        <a href="https://tr.ee/7MLDnzjgn6" target="_blank">
-          "Música de Ambiente"
-        </a>
-    </p>
-
-    <hr>
-    <p>
-        Watch
-        <a href="https://youtu.be/4ln-Vfysqks" target="_blank">
-          "Clareza"
-        </a>
-    </p>
-
-  </body>
+    });
+  </script>
+</body>
 </html>
