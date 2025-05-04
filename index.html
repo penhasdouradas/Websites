@@ -130,7 +130,7 @@
           <a href="https://penhasdouradas.bandcamp.com" target="_blank">Bandcamp</a> — 
           <a href="https://instagram.com/penhas.douradas" target="_blank">Instagram</a> —
           <a href="https://youtube.com/@penhasdouradas" target="_blank">Youtube</a> —
-          <a href="mailto:contact.penhasdouradas@proton.me">Email</a>
+          <a href="mailto:contact@penhasdouradas.eu">Email</a>
         </div>
         <div class="section">
           <p>Penhas Douradas is the music project of Portuguese-born João Chaves. Inspired by the serene landscapes and quiet introspection of the mountains, and named after a region close to where the artist grew up, the name carries a deeply personal connection, a place that often stood in for home on weather forecasts, becoming a subtle but meaningful symbol of belonging.</p>
@@ -140,11 +140,10 @@
         </div>
         <div class="section">
           <h2>ANNOUNCEMENTS</h2>
-          <p><a href="#" class="image-toggle"><strong>Sabedoria Interior</strong> is now out on all major streaming platforms.</a></p>
+          <p><a href="#" class="image-toggle"><strong>Sabedoria Interior</strong> due to be released digitally on 16/05/2025.</a></p>
         </div>
         <div class="section">
           <h2>MEDIA</h2>
-          <p><a href="https://tr.ee/7MLDnzjgn6" target="_blank">Stream <strong>Sabedoria Interior</strong></a></p>
           <p><a href="https://tr.ee/7MLDnzjgn6" target="_blank">Stream <strong>Música de Ambiente</strong></a></p>
           <p><a href="#" class="watch-toggle">Watch <strong>Clareza</strong></a></p>
           <div class="video-container" hidden>
@@ -226,54 +225,64 @@
     document.addEventListener("click", e => {
       const drawer = document.getElementById("global-video");
       const iframe = document.getElementById("drawer-video");
-      const isToggle = e.target.closest(".watch-toggle");
-      const isInside = drawer.contains(e.target);
+      const isToggle = !!e.target.closest(".watch-toggle");
+      const isInside = !!e.target.closest("#global-video");
 
       if (isToggle) {
-        const show = drawer.style.display === 'none';
-        drawer.style.display = show ? 'flex' : 'none';
-        iframe.src = show ? "https://www.youtube.com/embed/4ln-Vfysqks" : "";
         e.preventDefault();
-      } else if (!isInside && drawer.style.display === 'flex') {
+        const show = drawer.style.display === 'flex';
+        drawer.style.display = show ? 'none' : 'flex';
+        iframe.src = show ? "" : "https://www.youtube.com/embed/4ln-Vfysqks";
+        return;
+      }
+
+      if (!isInside && drawer.style.display === 'flex') {
         drawer.style.display = 'none';
         iframe.src = '';
       }
     });
 
-    // Global image drawer
-    document.addEventListener("DOMContentLoaded", () => {
-      const imgDrawer = document.getElementById("global-image");
-      document.querySelectorAll(".image-toggle").forEach(link => {
-        link.addEventListener("click", e => {
-          e.preventDefault();
-          const show = imgDrawer.style.display === 'none';
-          imgDrawer.style.display = show ? 'flex' : 'none';
-        });
-      });
-      document.addEventListener("click", e => {
-        const imgDrawer = document.getElementById("global-image");
-        if (!e.target.closest(".image-toggle") && imgDrawer.contains(e.target) === false) {
-          imgDrawer.style.display = 'none';
-        }
-      });
+    // Global image drawer (delegated to catch newly appended links too)
+    document.addEventListener("click", e => {
+      const imgDrawer   = document.getElementById("global-image");
+      const isImageLink = !!e.target.closest(".image-toggle");
+      const isInside    = !!e.target.closest("#global-image");
+
+      if (isImageLink) {
+        e.preventDefault();
+        imgDrawer.style.display = imgDrawer.style.display === 'flex' ? 'none' : 'flex';
+        return;
+      }
+
+      if (!isInside && imgDrawer.style.display === 'flex') {
+        imgDrawer.style.display = 'none';
+      }
     });
   </script>
 
   <!-- Video Drawer -->
-  <div id="global-video" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-      width:100%;max-width:720px;display:none;pointer-events:none;z-index:1000">
+  <div id="global-video"
+       style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+              width:100%;max-width:720px;display:none;pointer-events:none;z-index:1000">
     <div style="width:100%;aspect-ratio:16/9;position:relative;margin:auto;pointer-events:auto">
-      <iframe id="drawer-video" src="" frameborder="0" allowfullscreen
-              style="width:100%;height:100%;border:none"></iframe>
+      <iframe id="drawer-video"
+              src=""
+              frameborder="0"
+              allowfullscreen
+              style="width:100%;height:100%;border:none">
+      </iframe>
     </div>
   </div>
 
   <!-- Image Drawer -->
-  <div id="global-image" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-      width:100%;max-width:720px;display:none;pointer-events:none;z-index:1000">
+  <div id="global-image"
+       style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+              width:100%;max-width:720px;display:none;pointer-events:none;z-index:1000">
     <div style="width:100%;position:relative;margin:auto;pointer-events:auto">
-      <img id="drawer-image" src="https://penhasdouradas.github.io/penhasdouradas/pd-si-cover.jpg"
-           alt="Sabedoria Interior cover" style="width:100%;height:auto;max-height:80vh;border:none"/>
+      <img id="drawer-image"
+           src="https://penhasdouradas.github.io/penhasdouradas/pd-si-cover.jpg"
+           alt="Sabedoria Interior cover"
+           style="width:100%;height:auto;max-height:80vh;border:none"/>
     </div>
   </div>
 </body>
