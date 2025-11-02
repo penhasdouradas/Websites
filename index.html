@@ -29,6 +29,7 @@
       padding: 40px;
       scrollbar-width: none;
       -ms-overflow-style: none;
+      position: relative; 
     }
     .column::-webkit-scrollbar {
       display: none;
@@ -93,8 +94,8 @@
       }
       .column {
         max-height: 100vh;
-        overflow-y: auto;                /* allow scrolling */
-        -webkit-overflow-scrolling: touch;/* smooth momentum on iOS */
+        overflow-y: auto;           
+        -webkit-overflow-scrolling: touch;
         padding: 20px;
         border: none;
       }
@@ -167,68 +168,69 @@
       </div>
     `;
 
+    // --- NEW: This function will be used for ALL columns ---
+    function setupInfiniteScroll(trackElement, containerElement) {
+      // Start with 3 blocks of content
+      trackElement.innerHTML = "";
+      for (let i = 0; i < 3; i++) {
+        trackElement.insertAdjacentHTML("beforeend", contentHTML);
+      }
+
+      // Create the "sentinel" to observe
+      const sentinel = document.createElement("div");
+      sentinel.style.height = "1px";
+      trackElement.appendChild(sentinel);
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          
+          // When sentinel is seen, unobserve it
+          observer.unobserve(sentinel);
+          
+          // Add two more blocks of content
+          for (let i = 0; i < 2; i++) {
+            trackElement.insertAdjacentHTML("beforeend", contentHTML);
+          }
+          
+          // Move the sentinel to the new bottom
+          trackElement.appendChild(sentinel);
+          
+          // Start observing the sentinel again
+          observer.observe(sentinel);
+        });
+      }, {
+        root: containerElement, // The scrollable element
+        rootMargin: "0px 0px 200px 0px", // Trigger 200px before end
+        threshold: 0
+      });
+
+      observer.observe(sentinel);
+    }
+
     function setupLayout() {
       const isDesktop = window.innerWidth > 768;
 
       if (isDesktop) {
-        // DESKTOP: three‐column looping scroll
-        ["track1","track2","track3"].forEach(id => {
+        // --- DESKTOP: Apply the smooth infinite scroll to all 3 columns ---
+        ["track1", "track2", "track3"].forEach(id => {
           const track = document.getElementById(id);
-          track.innerHTML = "";
-          for (let i = 0; i < 3; i++) {
-            track.insertAdjacentHTML("beforeend", contentHTML);
-          }
-          const parent = track.parentElement;
-          const singleHeight = track.scrollHeight / 3;
-          parent.scrollTop = singleHeight + 1;
-
-          parent.addEventListener("scroll", () => {
-            if (parent.scrollTop <= singleHeight * 0.5) {
-              parent.scrollTop += singleHeight;
-            } else if (parent.scrollTop >= singleHeight * 1.5) {
-              parent.scrollTop -= singleHeight;
-            }
-          });
+          const container = track.parentElement;
+          setupInfiniteScroll(track, container);
         });
-
       } else {
-        // MOBILE: infinite append with IntersectionObserver
+        // --- MOBILE: Use the same logic for the single column ---
         const track = document.getElementById("track1");
-        track.innerHTML = "";
-        for (let i = 0; i < 3; i++) {
-          track.insertAdjacentHTML("beforeend", contentHTML);
-        }
-
-        const sentinel = document.createElement("div");
-        sentinel.style.height = "1px";
-        track.appendChild(sentinel);
-
         const container = track.parentElement;
-
-        const observer = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            observer.unobserve(sentinel);
-            for (let i = 0; i < 2; i++) {
-              track.insertAdjacentHTML("beforeend", contentHTML);
-            }
-            track.appendChild(sentinel);
-            observer.observe(sentinel);
-          });
-        }, {
-          root: container,
-          rootMargin: "0px 0px 200px 0px",
-          threshold: 0
-        });
-
-        observer.observe(sentinel);
+        setupInfiniteScroll(track, container);
       }
     }
 
     setupLayout();
-    window.addEventListener("resize", () => location.reload());
+    // This reload-on-resize is good to ensure the correct JS logic runs
+    window.addEventListener("resize", () => location.reload()); 
 
-    // Global video drawer
+    // Global video drawer (unchanged)
     document.addEventListener("click", e => {
       const drawer = document.getElementById("global-video");
       const iframe = document.getElementById("drawer-video");
@@ -274,7 +276,7 @@
     });
   </script>
 
-  <!-- Video Drawer -->
+  <!-- Video Drawer (unchanged) -->
   <div id="global-video"
        style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
               width:100%;max-width:720px;display:none;pointer-events:none;z-index:1000">
@@ -288,7 +290,7 @@
     </div>
   </div>
 
-  <!-- Image Drawer -->
+  <!-- Image Drawer (unchanged) -->
   <div id="global-image"
        style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
               width:100%;max-width:720px;display:none;pointer-events:none;z-index:1000">
